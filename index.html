@@ -1,705 +1,870 @@
 <!DOCTYPE html>
+<!-- 
+  DOCTYPE tells the browser this is an HTML5 document.
+  Everything visible on the page lives between the <html> tags below.
+-->
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Big Tech Comps — Meta, Google, Microsoft</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --surface2: #181818;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #e8e8e4;
-    --muted: #888882;
-    --dim: #555550;
-    --meta: #4a9eff;
-    --goog: #34c48a;
-    --msft: #a78bfa;
-    --accent: #f0e6c8;
-    --pos: #34c48a;
-    --neg: #f87171;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-  .mono { font-family: 'IBM Plex Mono', monospace; }
+  <!-- 
+    HEAD section: not visible to users.
+    This is where the page title, fonts, and all the styling (CSS) set up is done.
+  -->
+  <meta charset="UTF-8">
+  <!-- charset: tells the browser to use standard English characters -->
 
-  /* Header */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 2rem 2.5rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .header-left .eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: .4rem;
-  }
-  .header-left h1 {
-    font-size: 26px;
-    font-weight: 300;
-    letter-spacing: -.02em;
-    color: var(--text);
-  }
-  .header-left h1 span { color: var(--accent); font-weight: 500; }
-  .header-right {
-    text-align: right;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--dim);
-    line-height: 1.8;
-  }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- viewport: makes the page look correct on mobile screens -->
 
-  /* Ticker bar */
-  .ticker-bar {
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-  }
-  .ticker-item {
-    padding: 1rem 2rem;
-    border-right: 1px solid var(--border);
-    min-width: 160px;
-  }
-  .ticker-item:last-child { border-right: none; }
-  .ticker-sym {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: .1em;
-    color: var(--muted);
-    margin-bottom: .25rem;
-  }
-  .ticker-price {
-    font-size: 22px;
-    font-weight: 500;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-  .ticker-change {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    margin-top: .15rem;
-  }
-  .t-meta { color: var(--meta); }
-  .t-goog { color: var(--goog); }
-  .t-msft { color: var(--msft); }
+  <title>Big Tech Comps — Meta, Google, Microsoft</title>
+  <!-- title: what shows up in the browser tab -->
 
-  /* Main layout */
-  main { padding: 2rem 2.5rem; max-width: 1200px; }
+  <!-- 
+    GOOGLE FONTS: loading two fonts from Google's free font library.
+    IBM Plex Mono = the monospace (typewriter-style) font used for numbers and labels.
+    IBM Plex Sans = the clean sans-serif font used for body text.
+    Primarily for terminal aesthetics.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-  /* Section */
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--dim);
-    padding-bottom: .5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.25rem;
-  }
+  <style>
+    /* 
+      CSS (Cascading Style Sheets): this entire block controls how everything LOOKS.
+      Colors, fonts, spacing, layouts are all defined here.
+    */
 
-  /* Metric grid */
-  .metric-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 2rem;
-  }
-  .metric-card {
-    background: var(--surface);
-    padding: 1.1rem 1.25rem;
-  }
-  .metric-card:hover { background: var(--surface2); }
-  .metric-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: .4rem;
-  }
-  .metric-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
-    font-weight: 500;
-    color: var(--text);
-  }
-  .metric-sub {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: .2rem;
-    font-family: 'IBM Plex Mono', monospace;
-  }
+    /* 
+      :root = global variables for the whole page.
+      Define the color palette here once so it can be reused everywhere.
+      This is why the dark theme is consistent — one color defined, used everywhere.
+      --bg = main background (near black)
+      --surface = slightly lighter background for cards
+      --text = main text color (off white)
+      --meta, --goog, --msft = the brand colors for each company
+    */
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --surface2: #181818;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #e8e8e4;
+      --muted: #888882;
+      --dim: #555550;
+      --meta: #4a9eff;
+      --goog: #34c48a;
+      --msft: #a78bfa;
+      --accent: #f0e6c8;
+      --pos: #34c48a;
+      --neg: #f87171;
+    }
 
-  /* Chart grid */
-  .chart-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 2rem;
-  }
-  .chart-box {
-    background: var(--surface);
-    padding: 1.25rem;
-  }
-  .chart-full {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 1.25rem;
-    margin-bottom: 2rem;
-  }
-  .chart-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: .75rem;
-  }
-  .legend {
-    display: flex;
-    gap: 1.25rem;
-    margin-bottom: .75rem;
-    flex-wrap: wrap;
-  }
-  .legend span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-  }
-  .legend-dot { width: 8px; height: 8px; border-radius: 1px; }
+    /* Reset: Removes default browser spacing */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Tabs */
-  .tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 0;
-    border-bottom: none;
-  }
-  .tab {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    padding: .6rem 1.25rem;
-    border: 1px solid var(--border);
-    border-bottom: none;
-    cursor: pointer;
-    background: var(--bg);
-    color: var(--dim);
-    margin-right: 2px;
-    transition: all .15s;
-  }
-  .tab:hover { color: var(--text); background: var(--surface2); }
-  .tab.active {
-    background: var(--surface);
-    color: var(--text);
-    border-color: var(--border2);
-  }
+    /* Body = The entire page background and default font */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-  /* Table */
-  .table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-top-color: var(--border2);
-    overflow-x: auto;
-    margin-bottom: 2rem;
-  }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--dim);
-    font-weight: 400;
-    padding: .75rem 1rem;
-    border-bottom: 1px solid var(--border);
-    text-align: right;
-    white-space: nowrap;
-  }
-  th:first-child { text-align: left; }
-  td {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    padding: .65rem 1rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-    text-align: right;
-    white-space: nowrap;
-  }
-  td:first-child { text-align: left; color: var(--muted); font-size: 11px; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--surface2); }
-  .pos { color: var(--pos); }
-  .neg { color: var(--neg); }
-  .meta-col { color: var(--meta); }
-  .goog-col { color: var(--goog); }
-  .msft-col { color: var(--msft); }
+    /* .mono = A helper class to switch any text to the monospace font */
+    .mono { font-family: 'IBM Plex Mono', monospace; }
 
-  /* Takeaways */
-  .takeaway-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 2rem;
-  }
-  .takeaway-card {
-    background: var(--surface);
-    padding: 1.1rem 1.25rem;
-    position: relative;
-  }
-  .takeaway-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-  }
-  .takeaway-card.meta::before { background: var(--meta); }
-  .takeaway-card.goog::before { background: var(--goog); }
-  .takeaway-card.msft::before { background: var(--msft); }
-  .takeaway-card.neutral::before { background: var(--accent); }
-  .takeaway-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--dim);
-    margin-bottom: .4rem;
-  }
-  .takeaway-value {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: .2rem;
-  }
-  .takeaway-sub {
-    font-size: 11px;
-    color: var(--muted);
-  }
+    /* 
+      HEADER: The top bar with the title and data source info.
+      display:flex + justify-content:space-between = Left and right aligned items.
+    */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 2.5rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .header-left .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: .4rem;
+    }
+    .header-left h1 {
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: -.02em;
+      color: var(--text);
+    }
+    .header-left h1 span { color: var(--accent); font-weight: 500; }
+    .header-right {
+      text-align: right;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--dim);
+      line-height: 1.8;
+    }
 
-  /* Footer */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 1.5rem 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  footer p {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--dim);
-  }
-  footer a {
-    color: var(--accent);
-    text-decoration: none;
-  }
+    /* 
+      TICKER BAR: The row showing stock prices for each company.
+      display:flex = Lines all three tickers up horizontally.
+      overflow-x:auto = Allows horizontal scrolling on small screens.
+    */
+    .ticker-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .ticker-item {
+      padding: 1rem 2rem;
+      border-right: 1px solid var(--border);
+      min-width: 160px;
+    }
+    .ticker-item:last-child { border-right: none; }
+    .ticker-sym {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+    .ticker-price {
+      font-size: 22px;
+      font-weight: 500;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .ticker-change {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      margin-top: .15rem;
+    }
 
-  @media (max-width: 640px) {
-    header, main, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
-    .chart-row { grid-template-columns: 1fr; }
-    .ticker-item { min-width: 130px; padding: .75rem 1.25rem; }
-  }
-</style>
+    /* Company color classes: Applied to text to color code each company */
+    .t-meta { color: var(--meta); }
+    .t-goog { color: var(--goog); }
+    .t-msft { color: var(--msft); }
+
+    /* MAIN: The primary content area with padding on all sides */
+    main { padding: 2rem 2.5rem; max-width: 1200px; }
+
+    /* 
+      SECTION LABEL: The small uppercase labels like "KEY METRICS — FY2025"
+      These are decorative separators to organize the page visually.
+    */
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    /* 
+      METRIC GRID: The 6 card grid showing key numbers at a glance.
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) = 
+      Automatically fits as many 160px minimum cards per row as possible.
+      gap: 1px + background: border color = Creates the grid line effect between cards.
+    */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--surface);
+      padding: 1.1rem 1.25rem;
+    }
+    .metric-card:hover { background: var(--surface2); }
+    .metric-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: .4rem;
+    }
+    .metric-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: .2rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    /* 
+      CHART CONTAINERS:
+      .chart-row = Two charts side by side (revenue + net income)
+      .chart-full = One chart spanning full width (FCF trend, EBITDA margin)
+      position:relative + height on the inner div = Required by Chart.js to render correctly
+    */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .chart-box {
+      background: var(--surface);
+      padding: 1.25rem;
+    }
+    .chart-full {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .chart-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+
+    /* LEGEND: The color key above each chart showing which color = which company */
+    .legend {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: .75rem;
+      flex-wrap: wrap;
+    }
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 1px; }
+
+    /* 
+      TABS: the Income Statement / Balance Sheet / Cash Flow switcher.
+      The active tab has a different background to show which table is visible.
+      The JS function showTable() handles switching between them.
+    */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+    .tab {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .6rem 1.25rem;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      cursor: pointer;
+      background: var(--bg);
+      color: var(--dim);
+      margin-right: 2px;
+      transition: all .15s;
+    }
+    .tab:hover { color: var(--text); background: var(--surface2); }
+    .tab.active {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--border2);
+    }
+
+    /* 
+      TABLE STYLES: The detailed comps data table.
+      border-collapse:collapse = Removes double borders between cells.
+      tr:hover = Highlights the row you're hovering over.
+    */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top-color: var(--border2);
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      font-weight: 400;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+      white-space: nowrap;
+    }
+    th:first-child { text-align: left; }
+    td {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      text-align: right;
+      white-space: nowrap;
+    }
+    td:first-child { text-align: left; color: var(--muted); font-size: 11px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    /* Color classes for positive/negative values and company columns */
+    .pos { color: var(--pos); }
+    .neg { color: var(--neg); }
+    .meta-col { color: var(--meta); }
+    .goog-col { color: var(--goog); }
+    .msft-col { color: var(--msft); }
+
+    /* 
+      TAKEAWAY CARDS: The summary insight cards at the bottom.
+      ::before = A CSS pseudo element that creates the colored top border accent line
+      without needing extra HTML. Each company gets its own color.
+    */
+    .takeaway-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .takeaway-card {
+      background: var(--surface);
+      padding: 1.1rem 1.25rem;
+      position: relative;
+    }
+    .takeaway-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .takeaway-card.meta::before { background: var(--meta); }
+    .takeaway-card.goog::before { background: var(--goog); }
+    .takeaway-card.msft::before { background: var(--msft); }
+    .takeaway-card.neutral::before { background: var(--accent); }
+    .takeaway-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: .4rem;
+    }
+    .takeaway-value {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: .2rem;
+    }
+    .takeaway-sub { font-size: 11px; color: var(--muted); }
+
+    /* FOOTER: bottom bar with attribution */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer p { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--dim); }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* RESPONSIVE: on small screens, stack charts vertically and reduce padding */
+    @media (max-width: 640px) {
+      header, main, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .chart-row { grid-template-columns: 1fr; }
+      .ticker-item { min-width: 130px; padding: .75rem 1.25rem; }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- 
+    BODY: everything the user actually sees.
+    Organized into: header → ticker bar → main content → footer
+  -->
 
-<header>
-  <div class="header-left">
-    <div class="eyebrow">Comparable company analysis</div>
-    <h1>Big tech — <span>digital advertising & AI</span></h1>
-  </div>
-  <div class="header-right">
-    <div>Data source: Yahoo Finance</div>
-    <div>Annual | FY2022–FY2025</div>
-    <div>All figures USD thousands</div>
-    <div>Built by Nicole Lin</div>
-  </div>
-</header>
+  <!-- HEADER: title and data source info -->
+  <header>
+    <div class="header-left">
+      <div class="eyebrow">Comparable company analysis</div>
+      <h1>Big tech — <span>digital advertising & AI</span></h1>
+    </div>
+    <div class="header-right">
+      <div>Data source: Yahoo Finance</div>
+      <div>Annual | FY2022–FY2025</div>
+      <div>All figures USD thousands</div>
+      <div>Built by Nicole Lin</div>
+    </div>
+  </header>
 
-<div class="ticker-bar">
-  <div class="ticker-item">
-    <div class="ticker-sym">META</div>
-    <div class="ticker-price t-meta">$597.63</div>
-    <div class="ticker-change neg">▼ 0.47% June 2, 2026</div>
-  </div>
-  <div class="ticker-item">
-    <div class="ticker-sym">GOOG</div>
-    <div class="ticker-price t-goog">$358.39</div>
-    <div class="ticker-change neg">▼ 3.81% June 2, 2026</div>
-  </div>
-  <div class="ticker-item">
-    <div class="ticker-sym">MSFT</div>
-    <div class="ticker-price t-msft">$441.31</div>
-    <div class="ticker-change neg">▼ 4.17% June 2, 2026</div>
-  </div>
-  <div class="ticker-item" style="flex:1; min-width:0; border-right:none;">
-    <div class="ticker-sym">Coverage universe</div>
-    <div style="font-size:13px; color:var(--muted); margin-top:.3rem;">3 companies · Digital advertising, cloud & AI infrastructure</div>
-  </div>
-</div>
-
-<main>
-
-  <div style="margin-bottom:2rem">
-    <div class="section-label">Key metrics — FY2025</div>
-    <div class="metric-grid">
-      <div class="metric-card">
-        <div class="metric-label">META revenue</div>
-        <div class="metric-value t-meta">$200.97B</div>
-        <div class="metric-sub">+22.2% YoY</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">GOOG revenue</div>
-        <div class="metric-value t-goog">$402.84B</div>
-        <div class="metric-sub">+15.1% YoY</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">MSFT revenue</div>
-        <div class="metric-value t-msft">$281.72B</div>
-        <div class="metric-sub">+14.9% YoY</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">META net income</div>
-        <div class="metric-value t-meta">$60.46B</div>
-        <div class="metric-sub">Net margin 30.1%</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">GOOG net income</div>
-        <div class="metric-value t-goog">$100.12B</div>
-        <div class="metric-sub">Net margin 24.9%</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">MSFT net income</div>
-        <div class="metric-value t-msft">$101.83B</div>
-        <div class="metric-sub">Net margin 36.1%</div>
-      </div>
+  <!-- 
+    TICKER BAR: live style price display for each company.
+    Each .ticker item is one company block.
+    The color classes (t-meta, t-goog, t-msft) apply the brand colors defined in CSS.
+  -->
+  <div class="ticker-bar">
+    <div class="ticker-item">
+      <div class="ticker-sym">META</div>
+      <div class="ticker-price t-meta">$597.63</div>
+      <div class="ticker-change neg">▼ 0.47% June 2, 2026</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-sym">GOOG</div>
+      <div class="ticker-price t-goog">$358.39</div>
+      <div class="ticker-change neg">▼ 3.81% June 2, 2026</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-sym">MSFT</div>
+      <div class="ticker-price t-msft">$441.31</div>
+      <div class="ticker-change neg">▼ 4.17% June 2, 2026</div>
+    </div>
+    <div class="ticker-item" style="flex:1; min-width:0; border-right:none;">
+      <div class="ticker-sym">Coverage universe</div>
+      <div style="font-size:13px; color:var(--muted); margin-top:.3rem;">3 companies · Digital advertising, cloud & AI infrastructure</div>
     </div>
   </div>
 
-  <div class="chart-row">
-    <div class="chart-box">
-      <div class="chart-title">Revenue (2022–2025, $B)</div>
+  <!-- MAIN CONTENT AREA -->
+  <main>
+
+    <!-- KEY METRICS SECTION: 6 summary cards showing the most important numbers -->
+    <div style="margin-bottom:2rem">
+      <div class="section-label">Key metrics — FY2025</div>
+      <div class="metric-grid">
+        <!-- Each metric-card = One stat box. Label on top, big number in middle, context below -->
+        <div class="metric-card">
+          <div class="metric-label">META revenue</div>
+          <div class="metric-value t-meta">$200.97B</div>
+          <div class="metric-sub">+22.2% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">GOOG revenue</div>
+          <div class="metric-value t-goog">$402.84B</div>
+          <div class="metric-sub">+15.1% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">MSFT revenue</div>
+          <div class="metric-value t-msft">$281.72B</div>
+          <div class="metric-sub">+14.9% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">META net income</div>
+          <div class="metric-value t-meta">$60.46B</div>
+          <div class="metric-sub">Net margin 30.1%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">GOOG net income</div>
+          <div class="metric-value t-goog">$100.12B</div>
+          <div class="metric-sub">Net margin 24.9%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">MSFT net income</div>
+          <div class="metric-value t-msft">$101.83B</div>
+          <div class="metric-sub">Net margin 36.1%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+      CHART ROW: two bar charts side by side.
+      Each chart needs:
+      1. A <canvas> element : This is where Chart.js draws the actual chart
+      2. A wrapper div with explicit height : Chart.js needs this to size correctly
+      The actual chart data and config is in the <script> section at the bottom.
+    -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <div class="chart-title">Revenue (2022–2025, $B)</div>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
+          <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
+          <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
+        </div>
+        <div style="position:relative;height:220px">
+          <canvas id="revenueChart" role="img" aria-label="Bar chart of annual revenue for Meta Google and Microsoft 2022 to 2025">Revenue data across four years.</canvas>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Net income (2022–2025, $B)</div>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
+          <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
+          <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
+        </div>
+        <div style="position:relative;height:220px">
+          <canvas id="netIncomeChart" role="img" aria-label="Bar chart of net income for Meta Google and Microsoft 2022 to 2025">Net income data.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- FULL WIDTH CHARTS: FCF trend and EBITDA margin as line charts -->
+    <div class="chart-full">
+      <div class="chart-title">Free cash flow trend (2022–2025, $B)</div>
       <div class="legend">
         <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
         <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
         <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
       </div>
       <div style="position:relative;height:220px">
-        <canvas id="revenueChart" role="img" aria-label="Bar chart of annual revenue for Meta Google and Microsoft 2022 to 2025">Revenue data across four years for three companies.</canvas>
+        <canvas id="fcfChart" role="img" aria-label="Line chart of free cash flow trends">Free cash flow trends.</canvas>
       </div>
     </div>
-    <div class="chart-box">
-      <div class="chart-title">Net income (2022–2025, $B)</div>
+
+    <div class="chart-full">
+      <div class="chart-title">EBITDA margin % (2022–2025)</div>
       <div class="legend">
         <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
         <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
         <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
       </div>
       <div style="position:relative;height:220px">
-        <canvas id="netIncomeChart" role="img" aria-label="Bar chart of net income for Meta Google and Microsoft 2022 to 2025">Net income data.</canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="chart-full">
-    <div class="chart-title">Free cash flow trend (2022–2025, $B)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
-      <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
-      <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
-    </div>
-    <div style="position:relative;height:220px">
-      <canvas id="fcfChart" role="img" aria-label="Line chart of free cash flow for Meta Google and Microsoft 2022 to 2025">Free cash flow trends.</canvas>
-    </div>
-  </div>
-
-  <div class="chart-full">
-    <div class="chart-title">EBITDA margin % (2022–2025)</div>
-    <div class="legend">
-      <span><span class="legend-dot" style="background:#4a9eff"></span>META</span>
-      <span><span class="legend-dot" style="background:#34c48a"></span>GOOG</span>
-      <span><span class="legend-dot" style="background:#a78bfa"></span>MSFT</span>
-    </div>
-    <div style="position:relative;height:220px">
-      <canvas id="ebitdaChart" role="img" aria-label="Line chart of EBITDA margin percentage for Meta Google and Microsoft 2022 to 2025">EBITDA margin trends.</canvas>
-    </div>
-  </div>
-
-  <div style="margin-bottom:2rem">
-    <div class="section-label">Detailed comps table</div>
-    <div class="tabs">
-      <button class="tab active" onclick="showTable('income')">Income statement</button>
-      <button class="tab" onclick="showTable('balance')">Balance sheet</button>
-      <button class="tab" onclick="showTable('cashflow')">Cash flow</button>
-    </div>
-
-    <div id="income-table">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th class="meta-col">META 2025</th>
-              <th class="goog-col">GOOG 2025</th>
-              <th class="msft-col">MSFT 2025</th>
-              <th>META 2024</th>
-              <th>GOOG 2024</th>
-              <th>MSFT 2024</th>
-              <th>META 2023</th>
-              <th>GOOG 2023</th>
-              <th>MSFT 2023</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Total revenue ($K)</td><td class="meta-col">200,966,000</td><td class="goog-col">402,836,000</td><td class="msft-col">281,724,000</td><td>164,501,000</td><td>350,018,000</td><td>245,122,000</td><td>134,902,000</td><td>307,394,000</td><td>211,915,000</td></tr>
-            <tr><td>Gross profit ($K)</td><td class="meta-col">164,791,000</td><td class="goog-col">240,301,000</td><td class="msft-col">193,893,000</td><td>134,340,000</td><td>203,712,000</td><td>171,008,000</td><td>108,943,000</td><td>174,062,000</td><td>146,052,000</td></tr>
-            <tr><td>Gross margin %</td><td class="pos meta-col">82.0%</td><td class="pos goog-col">59.7%</td><td class="pos msft-col">68.8%</td><td class="pos">81.7%</td><td class="pos">58.2%</td><td class="pos">69.8%</td><td class="pos">80.8%</td><td class="pos">56.6%</td><td class="pos">68.9%</td></tr>
-            <tr><td>Operating income ($K)</td><td class="meta-col">83,276,000</td><td class="goog-col">129,039,000</td><td class="msft-col">128,528,000</td><td>69,380,000</td><td>112,390,000</td><td>109,433,000</td><td>46,751,000</td><td>84,293,000</td><td>88,523,000</td></tr>
-            <tr><td>Operating margin %</td><td class="pos meta-col">41.4%</td><td class="pos goog-col">32.0%</td><td class="pos msft-col">45.6%</td><td class="pos">42.2%</td><td class="pos">32.1%</td><td class="pos">44.7%</td><td class="pos">34.7%</td><td class="pos">27.4%</td><td class="pos">41.8%</td></tr>
-            <tr><td>Net income ($K)</td><td class="meta-col">60,458,000</td><td class="goog-col">100,118,000</td><td class="msft-col">101,832,000</td><td>62,360,000</td><td>73,795,000</td><td>88,136,000</td><td>39,098,000</td><td>73,795,000</td><td>72,361,000</td></tr>
-            <tr><td>Net margin %</td><td class="pos meta-col">30.1%</td><td class="pos goog-col">24.9%</td><td class="pos msft-col">36.1%</td><td class="pos">37.9%</td><td class="pos">21.1%</td><td class="pos">36.0%</td><td class="pos">29.0%</td><td class="pos">24.0%</td><td class="pos">34.1%</td></tr>
-            <tr><td>EBITDA ($K)</td><td class="meta-col">105,713,000</td><td class="goog-col">180,698,000</td><td class="msft-col">160,165,000</td><td>86,876,000</td><td>135,394,000</td><td>133,009,000</td><td>59,052,000</td><td>97,971,000</td><td>105,140,000</td></tr>
-            <tr><td>EBITDA margin %</td><td class="pos meta-col">52.6%</td><td class="pos goog-col">44.9%</td><td class="pos msft-col">56.9%</td><td class="pos">52.8%</td><td class="pos">38.7%</td><td class="pos">54.3%</td><td class="pos">43.8%</td><td class="pos">31.9%</td><td class="pos">49.6%</td></tr>
-          </tbody>
-        </table>
+        <canvas id="ebitdaChart" role="img" aria-label="Line chart of EBITDA margin percentage trends">EBITDA margin trends.</canvas>
       </div>
     </div>
 
-    <div id="balance-table" style="display:none">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th class="meta-col">META 2025</th>
-              <th class="goog-col">GOOG 2025</th>
-              <th class="msft-col">MSFT 2025</th>
-              <th>META 2024</th>
-              <th>GOOG 2024</th>
-              <th>MSFT 2024</th>
-              <th>META 2022</th>
-              <th>GOOG 2022</th>
-              <th>MSFT 2022</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Total assets ($K)</td><td class="meta-col">366,021,000</td><td class="goog-col">595,281,000</td><td class="msft-col">619,003,000</td><td>276,054,000</td><td>450,256,000</td><td>512,163,000</td><td>185,727,000</td><td>365,264,000</td><td>364,840,000</td></tr>
-            <tr><td>Total equity ($K)</td><td class="meta-col">217,243,000</td><td class="goog-col">415,265,000</td><td class="msft-col">343,479,000</td><td>182,637,000</td><td>325,084,000</td><td>268,477,000</td><td>125,713,000</td><td>256,144,000</td><td>166,542,000</td></tr>
-            <tr><td>Total debt ($K)</td><td class="meta-col">83,897,000</td><td class="goog-col">59,291,000</td><td class="msft-col">60,588,000</td><td>49,060,000</td><td>22,574,000</td><td>67,127,000</td><td>26,591,000</td><td>29,679,000</td><td>61,270,000</td></tr>
-            <tr><td>Net debt ($K)</td><td class="meta-col">22,871,000</td><td class="goog-col">15,839,000</td><td class="msft-col">12,909,000</td><td>—</td><td>—</td><td>33,315,000</td><td>—</td><td>—</td><td>35,850,000</td></tr>
-            <tr><td>Debt / equity</td><td class="meta-col">0.39x</td><td class="goog-col">0.14x</td><td class="msft-col">0.18x</td><td>0.27x</td><td>0.07x</td><td>0.25x</td><td>0.21x</td><td>0.12x</td><td>0.37x</td></tr>
-            <tr><td>Working capital ($K)</td><td class="meta-col">66,886,000</td><td class="goog-col">103,293,000</td><td class="msft-col">49,913,000</td><td>66,449,000</td><td>74,589,000</td><td>34,448,000</td><td>32,523,000</td><td>95,495,000</td><td>74,602,000</td></tr>
-          </tbody>
-        </table>
+    <!-- 
+      TABBED TABLES SECTION:
+      Three tables (income, balance sheet, cash flow) share the same space.
+      Only one is visible at a time : controlled by display:none/block in JS.
+      The tab buttons call showTable() when clicked.
+    -->
+    <div style="margin-bottom:2rem">
+      <div class="section-label">Detailed comps table</div>
+
+      <!-- Tab buttons : Clicking each calls showTable() with the tab name -->
+      <div class="tabs">
+        <button class="tab active" onclick="showTable('income')">Income statement</button>
+        <button class="tab" onclick="showTable('balance')">Balance sheet</button>
+        <button class="tab" onclick="showTable('cashflow')">Cash flow</button>
+      </div>
+
+      <!-- INCOME STATEMENT TABLE: visible by default -->
+      <div id="income-table">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th class="meta-col">META 2025</th>
+                <th class="goog-col">GOOG 2025</th>
+                <th class="msft-col">MSFT 2025</th>
+                <th>META 2024</th>
+                <th>GOOG 2024</th>
+                <th>MSFT 2024</th>
+                <th>META 2023</th>
+                <th>GOOG 2023</th>
+                <th>MSFT 2023</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Each row = One financial metric across all companies and years -->
+              <tr><td>Total revenue ($K)</td><td class="meta-col">200,966,000</td><td class="goog-col">402,836,000</td><td class="msft-col">281,724,000</td><td>164,501,000</td><td>350,018,000</td><td>245,122,000</td><td>134,902,000</td><td>307,394,000</td><td>211,915,000</td></tr>
+              <tr><td>Gross profit ($K)</td><td class="meta-col">164,791,000</td><td class="goog-col">240,301,000</td><td class="msft-col">193,893,000</td><td>134,340,000</td><td>203,712,000</td><td>171,008,000</td><td>108,943,000</td><td>174,062,000</td><td>146,052,000</td></tr>
+              <tr><td>Gross margin %</td><td class="pos meta-col">82.0%</td><td class="pos goog-col">59.7%</td><td class="pos msft-col">68.8%</td><td class="pos">81.7%</td><td class="pos">58.2%</td><td class="pos">69.8%</td><td class="pos">80.8%</td><td class="pos">56.6%</td><td class="pos">68.9%</td></tr>
+              <tr><td>Operating income ($K)</td><td class="meta-col">83,276,000</td><td class="goog-col">129,039,000</td><td class="msft-col">128,528,000</td><td>69,380,000</td><td>112,390,000</td><td>109,433,000</td><td>46,751,000</td><td>84,293,000</td><td>88,523,000</td></tr>
+              <tr><td>Operating margin %</td><td class="pos meta-col">41.4%</td><td class="pos goog-col">32.0%</td><td class="pos msft-col">45.6%</td><td class="pos">42.2%</td><td class="pos">32.1%</td><td class="pos">44.7%</td><td class="pos">34.7%</td><td class="pos">27.4%</td><td class="pos">41.8%</td></tr>
+              <tr><td>Net income ($K)</td><td class="meta-col">60,458,000</td><td class="goog-col">100,118,000</td><td class="msft-col">101,832,000</td><td>62,360,000</td><td>73,795,000</td><td>88,136,000</td><td>39,098,000</td><td>73,795,000</td><td>72,361,000</td></tr>
+              <tr><td>Net margin %</td><td class="pos meta-col">30.1%</td><td class="pos goog-col">24.9%</td><td class="pos msft-col">36.1%</td><td class="pos">37.9%</td><td class="pos">21.1%</td><td class="pos">36.0%</td><td class="pos">29.0%</td><td class="pos">24.0%</td><td class="pos">34.1%</td></tr>
+              <tr><td>EBITDA ($K)</td><td class="meta-col">105,713,000</td><td class="goog-col">180,698,000</td><td class="msft-col">160,165,000</td><td>86,876,000</td><td>135,394,000</td><td>133,009,000</td><td>59,052,000</td><td>97,971,000</td><td>105,140,000</td></tr>
+              <tr><td>EBITDA margin %</td><td class="pos meta-col">52.6%</td><td class="pos goog-col">44.9%</td><td class="pos msft-col">56.9%</td><td class="pos">52.8%</td><td class="pos">38.7%</td><td class="pos">54.3%</td><td class="pos">43.8%</td><td class="pos">31.9%</td><td class="pos">49.6%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BALANCE SHEET TABLE: Hidden by default (display:none), shown when tab is clicked -->
+      <div id="balance-table" style="display:none">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th class="meta-col">META 2025</th>
+                <th class="goog-col">GOOG 2025</th>
+                <th class="msft-col">MSFT 2025</th>
+                <th>META 2024</th>
+                <th>GOOG 2024</th>
+                <th>MSFT 2024</th>
+                <th>META 2022</th>
+                <th>GOOG 2022</th>
+                <th>MSFT 2022</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Total assets ($K)</td><td class="meta-col">366,021,000</td><td class="goog-col">595,281,000</td><td class="msft-col">619,003,000</td><td>276,054,000</td><td>450,256,000</td><td>512,163,000</td><td>185,727,000</td><td>365,264,000</td><td>364,840,000</td></tr>
+              <tr><td>Total equity ($K)</td><td class="meta-col">217,243,000</td><td class="goog-col">415,265,000</td><td class="msft-col">343,479,000</td><td>182,637,000</td><td>325,084,000</td><td>268,477,000</td><td>125,713,000</td><td>256,144,000</td><td>166,542,000</td></tr>
+              <tr><td>Total debt ($K)</td><td class="meta-col">83,897,000</td><td class="goog-col">59,291,000</td><td class="msft-col">60,588,000</td><td>49,060,000</td><td>22,574,000</td><td>67,127,000</td><td>26,591,000</td><td>29,679,000</td><td>61,270,000</td></tr>
+              <tr><td>Net debt ($K)</td><td class="meta-col">22,871,000</td><td class="goog-col">15,839,000</td><td class="msft-col">12,909,000</td><td>—</td><td>—</td><td>33,315,000</td><td>—</td><td>—</td><td>35,850,000</td></tr>
+              <tr><td>Debt / equity</td><td class="meta-col">0.39x</td><td class="goog-col">0.14x</td><td class="msft-col">0.18x</td><td>0.27x</td><td>0.07x</td><td>0.25x</td><td>0.21x</td><td>0.12x</td><td>0.37x</td></tr>
+              <tr><td>Working capital ($K)</td><td class="meta-col">66,886,000</td><td class="goog-col">103,293,000</td><td class="msft-col">49,913,000</td><td>66,449,000</td><td>74,589,000</td><td>34,448,000</td><td>32,523,000</td><td>95,495,000</td><td>74,602,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CASH FLOW TABLE: hidden by default -->
+      <div id="cashflow-table" style="display:none">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th class="meta-col">META 2025</th>
+                <th class="goog-col">GOOG 2025</th>
+                <th class="msft-col">MSFT 2025</th>
+                <th>META 2024</th>
+                <th>GOOG 2024</th>
+                <th>MSFT 2024</th>
+                <th>META 2022</th>
+                <th>GOOG 2022</th>
+                <th>MSFT 2022</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Operating cash flow ($K)</td><td class="meta-col">115,800,000</td><td class="goog-col">164,713,000</td><td class="msft-col">136,162,000</td><td>91,328,000</td><td>125,299,000</td><td>118,548,000</td><td>50,475,000</td><td>91,495,000</td><td>89,035,000</td></tr>
+              <tr><td>Capital expenditure ($K)</td><td class="meta-col">-69,691,000</td><td class="goog-col">-91,447,000</td><td class="msft-col">-64,551,000</td><td>-37,256,000</td><td>-52,535,000</td><td>-44,477,000</td><td>-31,186,000</td><td>-31,485,000</td><td>-23,886,000</td></tr>
+              <tr><td>Free cash flow ($K)</td><td class="meta-col">46,109,000</td><td class="goog-col">73,266,000</td><td class="msft-col">71,611,000</td><td>54,072,000</td><td>72,764,000</td><td>74,071,000</td><td>19,289,000</td><td>60,010,000</td><td>65,149,000</td></tr>
+              <tr><td>FCF margin %</td><td class="pos meta-col">22.9%</td><td class="pos goog-col">18.2%</td><td class="pos msft-col">25.4%</td><td class="pos">32.9%</td><td class="pos">20.8%</td><td class="pos">30.2%</td><td class="pos">16.5%</td><td class="pos">21.2%</td><td class="pos">32.9%</td></tr>
+              <tr><td>Investing cash flow ($K)</td><td class="meta-col">-102,003,000</td><td class="goog-col">-120,291,000</td><td class="msft-col">-72,599,000</td><td>-24,495,000</td><td>-45,536,000</td><td>-96,970,000</td><td>-28,970,000</td><td>-20,298,000</td><td>-30,311,000</td></tr>
+              <tr><td>Financing cash flow ($K)</td><td class="meta-col">-20,370,000</td><td class="goog-col">-37,388,000</td><td class="msft-col">-51,699,000</td><td>-40,781,000</td><td>-79,733,000</td><td>-37,757,000</td><td>-22,136,000</td><td>-69,757,000</td><td>-58,876,000</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div id="cashflow-table" style="display:none">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th class="meta-col">META 2025</th>
-              <th class="goog-col">GOOG 2025</th>
-              <th class="msft-col">MSFT 2025</th>
-              <th>META 2024</th>
-              <th>GOOG 2024</th>
-              <th>MSFT 2024</th>
-              <th>META 2022</th>
-              <th>GOOG 2022</th>
-              <th>MSFT 2022</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Operating cash flow ($K)</td><td class="meta-col">115,800,000</td><td class="goog-col">164,713,000</td><td class="msft-col">136,162,000</td><td>91,328,000</td><td>125,299,000</td><td>118,548,000</td><td>50,475,000</td><td>91,495,000</td><td>89,035,000</td></tr>
-            <tr><td>Capital expenditure ($K)</td><td class="meta-col">-69,691,000</td><td class="goog-col">-91,447,000</td><td class="msft-col">-64,551,000</td><td>-37,256,000</td><td>-52,535,000</td><td>-44,477,000</td><td>-31,186,000</td><td>-31,485,000</td><td>-23,886,000</td></tr>
-            <tr><td>Free cash flow ($K)</td><td class="meta-col">46,109,000</td><td class="goog-col">73,266,000</td><td class="msft-col">71,611,000</td><td>54,072,000</td><td>72,764,000</td><td>74,071,000</td><td>19,289,000</td><td>60,010,000</td><td>65,149,000</td></tr>
-            <tr><td>FCF margin %</td><td class="pos meta-col">22.9%</td><td class="pos goog-col">18.2%</td><td class="pos msft-col">25.4%</td><td class="pos">32.9%</td><td class="pos">20.8%</td><td class="pos">30.2%</td><td class="pos">16.5%</td><td class="pos">21.2%</td><td class="pos">32.9%</td></tr>
-            <tr><td>Investing cash flow ($K)</td><td class="meta-col">-102,003,000</td><td class="goog-col">-120,291,000</td><td class="msft-col">-72,599,000</td><td>-24,495,000</td><td>-45,536,000</td><td>-96,970,000</td><td>-28,970,000</td><td>-20,298,000</td><td>-30,311,000</td></tr>
-            <tr><td>Financing cash flow ($K)</td><td class="meta-col">-20,370,000</td><td class="goog-col">-37,388,000</td><td class="msft-col">-51,699,000</td><td>-40,781,000</td><td>-79,733,000</td><td>-37,757,000</td><td>-22,136,000</td><td>-69,757,000</td><td>-58,876,000</td></tr>
-          </tbody>
-        </table>
+    <!-- KEY TAKEAWAYS: Analyst style insight cards summarizing the data -->
+    <div style="margin-bottom:2rem">
+      <div class="section-label">Key takeaways</div>
+      <div class="takeaway-grid">
+        <!-- Each card has a colored top border matching the company it highlights -->
+        <div class="takeaway-card meta">
+          <div class="takeaway-label">Highest gross margin</div>
+          <div class="takeaway-value">META — 82.0%</div>
+          <div class="takeaway-sub">Near-pure software ad model with minimal cost of revenue</div>
+        </div>
+        <div class="takeaway-card msft">
+          <div class="takeaway-label">Highest net margin</div>
+          <div class="takeaway-value">MSFT — 36.1%</div>
+          <div class="takeaway-sub">Azure + Office 365 recurring revenue drives efficiency</div>
+        </div>
+        <div class="takeaway-card meta">
+          <div class="takeaway-label">Fastest revenue growth</div>
+          <div class="takeaway-value">META — +22.2% YoY</div>
+          <div class="takeaway-sub">Ad recovery, Reels monetization, and AI-driven targeting</div>
+        </div>
+        <div class="takeaway-card goog">
+          <div class="takeaway-label">Largest absolute FCF</div>
+          <div class="takeaway-value">GOOG — $73.3B</div>
+          <div class="takeaway-sub">Search dominance generates durable free cash flow</div>
+        </div>
+        <div class="takeaway-card msft">
+          <div class="takeaway-label">Highest EBITDA margin</div>
+          <div class="takeaway-value">MSFT — 56.9%</div>
+          <div class="takeaway-sub">Consistent margin expansion across cloud and enterprise</div>
+        </div>
+        <div class="takeaway-card neutral">
+          <div class="takeaway-label">Capex investment leader</div>
+          <div class="takeaway-value">GOOG — $91.4B</div>
+          <div class="takeaway-sub">Heaviest AI infrastructure investment in the peer group</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div style="margin-bottom:2rem">
-    <div class="section-label">Key takeaways</div>
-    <div class="takeaway-grid">
-      <div class="takeaway-card meta">
-        <div class="takeaway-label">Highest gross margin</div>
-        <div class="takeaway-value">META — 82.0%</div>
-        <div class="takeaway-sub">Near-pure software ad model with minimal cost of revenue</div>
-      </div>
-      <div class="takeaway-card msft">
-        <div class="takeaway-label">Highest net margin</div>
-        <div class="takeaway-value">MSFT — 36.1%</div>
-        <div class="takeaway-sub">Azure + Office 365 recurring revenue drives efficiency</div>
-      </div>
-      <div class="takeaway-card meta">
-        <div class="takeaway-label">Fastest revenue growth</div>
-        <div class="takeaway-value">META — +22.2% YoY</div>
-        <div class="takeaway-sub">Ad recovery, Reels monetization, and AI-driven targeting</div>
-      </div>
-      <div class="takeaway-card goog">
-        <div class="takeaway-label">Largest absolute FCF</div>
-        <div class="takeaway-value">GOOG — $73.3B</div>
-        <div class="takeaway-sub">Search dominance generates durable free cash flow</div>
-      </div>
-      <div class="takeaway-card msft">
-        <div class="takeaway-label">Highest EBITDA margin</div>
-        <div class="takeaway-value">MSFT — 56.9%</div>
-        <div class="takeaway-sub">Consistent margin expansion across cloud and enterprise</div>
-      </div>
-      <div class="takeaway-card neutral">
-        <div class="takeaway-label">Capex investment leader</div>
-        <div class="takeaway-value">GOOG — $91.4B</div>
-        <div class="takeaway-sub">Heaviest AI infrastructure investment in the peer group</div>
-      </div>
-    </div>
-  </div>
+  </main>
 
-</main>
+  <!-- FOOTER: attribution and LinkedIn link -->
+  <footer>
+    <p>Built by Nicole Lin · Stony Brook University · Comparable Company Analysis · Data: Yahoo Finance · FY2022–FY2025</p>
+    <p><a href="https://linkedin.com/in/ncp-nlin">linkedin.com/in/ncp-nlin</a></p>
+  </footer>
 
-<footer>
-  <p>Built by Nicole Lin · Stony Brook University · Comparable Company Analysis Project · Data: Yahoo Finance · FY2022–FY2025</p>
-  <p><a href="https://linkedin.com/in/ncp-nlin">linkedin.com/in/ncp-nlin</a></p>
-</footer>
+  <!-- 
+    CHART.JS LIBRARY: loads the charting library from a CDN (content delivery network).
+    This single line gives us access to all chart types — bar, line, pie, etc.
+    It must load BEFORE the script below that uses it.
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-const years = ['2022','2023','2024','2025'];
-const gridC = 'rgba(255,255,255,0.06)';
-const tickC = 'rgba(255,255,255,0.35)';
+  <script>
+    /*
+      JAVASCRIPT SECTION: this controls all interactive behavior on the page.
+      Two things happen here:
+      1. Four charts are created using Chart.js
+      2. The showTable() function handles tab switching
+    */
 
-const base = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      mode: 'index', intersect: false,
-      backgroundColor: '#1a1a1a',
-      borderColor: 'rgba(255,255,255,0.12)',
-      borderWidth: 1,
-      titleColor: '#888',
-      bodyColor: '#e8e8e4',
-      titleFont: { family: 'IBM Plex Mono', size: 10 },
-      bodyFont: { family: 'IBM Plex Mono', size: 11 }
+    // Years array — used as x-axis labels on all charts
+    const years = ['2022','2023','2024','2025'];
+
+    // Grid and tick colors for chart axes: semi transparent white on dark bg
+    const gridC = 'rgba(255,255,255,0.06)';
+    const tickC = 'rgba(255,255,255,0.35)';
+
+    /*
+      BASE OPTIONS: shared config applied to all charts.
+      responsive: true = Chart resizes with the window
+      maintainAspectRatio: false = Lets us control height via the wrapper div
+      plugins.legend.display: false = We use our own custom HTML legend above each chart
+      scales = configures both x and y axes appearance
+    */
+    const base = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: '#1a1a1a',
+          borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1,
+          titleColor: '#888',
+          bodyColor: '#e8e8e4',
+          titleFont: { family: 'IBM Plex Mono', size: 10 },
+          bodyFont: { family: 'IBM Plex Mono', size: 11 }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: gridC },
+          ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, autoSkip: false }
+        },
+        y: {
+          grid: { color: gridC },
+          ticks: {
+            color: tickC,
+            font: { family: 'IBM Plex Mono', size: 10 },
+            callback: v => '$' + v + 'B' // formats y-axis numbers as "$XB"
+          }
+        }
+      }
+    };
+
+    /*
+      REVENUE CHART: grouped bar chart
+      document.getElementById('revenueChart') = Finds the <canvas> element in the HTML
+      type: 'bar' = bar chart
+      data.labels = x-axis values (the years)
+      datasets = one dataset per company, each with its own color and data array
+      data values are in billions (converted from thousands for readability)
+    */
+    new Chart(document.getElementById('revenueChart'), {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'META', data: [116.6, 134.9, 164.5, 201.0], backgroundColor: '#4a9eff99', borderColor: '#4a9eff', borderWidth: 1 },
+          { label: 'GOOG', data: [282.8, 307.4, 350.0, 402.8], backgroundColor: '#34c48a99', borderColor: '#34c48a', borderWidth: 1 },
+          { label: 'MSFT', data: [198.3, 211.9, 245.1, 281.7], backgroundColor: '#a78bfa99', borderColor: '#a78bfa', borderWidth: 1 }
+        ]
+      },
+      options: base
+    });
+
+    // NET INCOME CHART: same structure as revenue chart, different data
+    new Chart(document.getElementById('netIncomeChart'), {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'META', data: [23.2, 39.1, 62.4, 60.5], backgroundColor: '#4a9eff99', borderColor: '#4a9eff', borderWidth: 1 },
+          { label: 'GOOG', data: [60.0, 73.8, 100.1, 132.2], backgroundColor: '#34c48a99', borderColor: '#34c48a', borderWidth: 1 },
+          { label: 'MSFT', data: [72.7, 72.4, 88.1, 101.8], backgroundColor: '#a78bfa99', borderColor: '#a78bfa', borderWidth: 1 }
+        ]
+      },
+      options: base
+    });
+
+    /*
+      FREE CASH FLOW CHART: line chart
+      type: 'line' = Connects points with a line instead of bars
+      tension: 0.3 = Slight curve on the lines (0 = straight, 1 = very curved)
+      borderDash: [] = Solid line for META, dashed patterns for GOOG and MSFT
+      This visual distinction helps differentiate companies even in grayscale
+    */
+    new Chart(document.getElementById('fcfChart'), {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'META', data: [19.3, 44.1, 54.1, 46.1], borderColor: '#4a9eff', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#4a9eff', borderDash: [] },
+          { label: 'GOOG', data: [60.0, 69.5, 72.8, 73.3], borderColor: '#34c48a', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#34c48a', borderDash: [6,3] },
+          { label: 'MSFT', data: [65.1, 59.5, 74.1, 71.6], borderColor: '#a78bfa', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#a78bfa', borderDash: [2,2] }
+        ]
+      },
+      options: base
+    });
+
+    /*
+      EBITDA MARGIN CHART: Line chart showing percentages instead of dollar amounts
+      Note the custom y-axis tick formatter: v => v + '%' adds % sign
+      min: 25, max: 65 = sets y-axis range so differences are visually clear
+    */
+    new Chart(document.getElementById('ebitdaChart'), {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'META', data: [32.3, 40.2, 52.8, 52.6], borderColor: '#4a9eff', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#4a9eff', borderDash: [] },
+          { label: 'GOOG', data: [30.1, 31.9, 38.7, 44.9], borderColor: '#34c48a', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#34c48a', borderDash: [6,3] },
+          { label: 'MSFT', data: [50.7, 50.4, 54.3, 56.9], borderColor: '#a78bfa', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#a78bfa', borderDash: [2,2] }
+        ]
+      },
+      options: {
+        ...base, // spread operator: copies all base options, then overrides scales below
+        scales: {
+          x: { grid: { color: gridC }, ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, autoSkip: false } },
+          y: { grid: { color: gridC }, ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v + '%' }, min: 25, max: 65 }
+        }
+      }
+    });
+
+    /*
+      SHOWTABLE FUNCTION: handles the tab switching for the three data tables.
+      When a tab button is clicked, this function:
+      1. Loops through all three table divs and hides them (display:none)
+      2. Shows only the one matching the clicked tab (display:block)
+      3. Loops through all tab buttons and removes the 'active' class
+      4. Adds 'active' class back to the clicked tab button
+    */
+    function showTable(tab) {
+      ['income','balance','cashflow'].forEach(t => {
+        document.getElementById(t + '-table').style.display = t === tab ? 'block' : 'none';
+      });
+      document.querySelectorAll('.tab').forEach((el, i) => {
+        el.classList.toggle('active', ['income','balance','cashflow'][i] === tab);
+      });
     }
-  },
-  scales: {
-    x: {
-      grid: { color: gridC },
-      ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, autoSkip: false }
-    },
-    y: {
-      grid: { color: gridC },
-      ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, callback: v => '$' + v + 'B' }
-    }
-  }
-};
+  </script>
 
-new Chart(document.getElementById('revenueChart'), {
-  type: 'bar',
-  data: {
-    labels: years,
-    datasets: [
-      { label: 'META', data: [116.6, 134.9, 164.5, 201.0], backgroundColor: '#4a9eff99', borderColor: '#4a9eff', borderWidth: 1 },
-      { label: 'GOOG', data: [282.8, 307.4, 350.0, 402.8], backgroundColor: '#34c48a99', borderColor: '#34c48a', borderWidth: 1 },
-      { label: 'MSFT', data: [198.3, 211.9, 245.1, 281.7], backgroundColor: '#a78bfa99', borderColor: '#a78bfa', borderWidth: 1 }
-    ]
-  },
-  options: base
-});
-
-new Chart(document.getElementById('netIncomeChart'), {
-  type: 'bar',
-  data: {
-    labels: years,
-    datasets: [
-      { label: 'META', data: [23.2, 39.1, 62.4, 60.5], backgroundColor: '#4a9eff99', borderColor: '#4a9eff', borderWidth: 1 },
-      { label: 'GOOG', data: [60.0, 73.8, 100.1, 132.2], backgroundColor: '#34c48a99', borderColor: '#34c48a', borderWidth: 1 },
-      { label: 'MSFT', data: [72.7, 72.4, 88.1, 101.8], backgroundColor: '#a78bfa99', borderColor: '#a78bfa', borderWidth: 1 }
-    ]
-  },
-  options: base
-});
-
-new Chart(document.getElementById('fcfChart'), {
-  type: 'line',
-  data: {
-    labels: years,
-    datasets: [
-      { label: 'META', data: [19.3, 44.1, 54.1, 46.1], borderColor: '#4a9eff', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#4a9eff', borderDash: [] },
-      { label: 'GOOG', data: [60.0, 69.5, 72.8, 73.3], borderColor: '#34c48a', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#34c48a', borderDash: [6,3] },
-      { label: 'MSFT', data: [65.1, 59.5, 74.1, 71.6], borderColor: '#a78bfa', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#a78bfa', borderDash: [2,2] }
-    ]
-  },
-  options: base
-});
-
-new Chart(document.getElementById('ebitdaChart'), {
-  type: 'line',
-  data: {
-    labels: years,
-    datasets: [
-      { label: 'META', data: [32.3, 40.2, 52.8, 52.6], borderColor: '#4a9eff', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#4a9eff', borderDash: [] },
-      { label: 'GOOG', data: [30.1, 31.9, 38.7, 44.9], borderColor: '#34c48a', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#34c48a', borderDash: [6,3] },
-      { label: 'MSFT', data: [50.7, 50.4, 54.3, 56.9], borderColor: '#a78bfa', tension: 0.3, fill: false, pointRadius: 4, pointBackgroundColor: '#a78bfa', borderDash: [2,2] }
-    ]
-  },
-  options: {
-    ...base,
-    scales: {
-      x: { grid: { color: gridC }, ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, autoSkip: false } },
-      y: { grid: { color: gridC }, ticks: { color: tickC, font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v + '%' }, min: 25, max: 65 }
-    }
-  }
-});
-
-function showTable(tab) {
-  ['income','balance','cashflow'].forEach(t => {
-    document.getElementById(t + '-table').style.display = t === tab ? 'block' : 'none';
-  });
-  document.querySelectorAll('.tab').forEach((el, i) => {
-    el.classList.toggle('active', ['income','balance','cashflow'][i] === tab);
-  });
-}
-</script>
 </body>
 </html>
-
